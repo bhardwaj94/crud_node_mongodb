@@ -1,0 +1,45 @@
+
+html
+    head
+        title Login Here
+        link(rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous")
+    
+    body.container
+        div.page-header
+            h1 Simple Auth-System
+        
+        nav.navbar.navbar-default
+            .container-fluid
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                .collapse.navbar-collapse
+                    ul.nav.navbar-nav
+                        li 
+                            a(href="/") Home
+                        li 
+                            a(href="/signUp") Sign Up
+                        li 
+                            a(href="/dashboard") Dashboard
+
+                    ul.nav.navbar-nav.navbar-right
+                        li 
+                            a(href="/logIn") Log In
+                        li 
+                            a(href="/logout") Log Out    
+
+        .container.row
+            .jumbotron.col-md-offset-3.col-md-4.pull-center
+                form(method="post" action="/dashboard/notes/"+note._id+"?_method=PUT")
+                    div
+                        label Title:
+                        br
+                        input(type="text" name="title" value=note.title)
+                    
+                    div
+                        label content:
+                        br
+                        input(type="text" name="content" value=note.content)
+        
+                    div
+                        input.btn.btn-primary(type="submit" value="Submit")
+        
+                                

@@ -2,6 +2,10 @@ module.exports = (route) => {
     const notes = require('../controllers/note.controller.js');
     
     // Create a new Note
+    route.get('/',(req,res)=>{
+        console.log(req.session.userId);
+        res.sendFile('G:/projects/node-mongo_crud/app/view/user.html');
+    });
     route.post('/', notes.create);
 
     // Retrieve all Notes
@@ -10,7 +14,7 @@ module.exports = (route) => {
     // Retrieve a single Note with noteId
     route.get('/:noteId', notes.findOne);
 
-    route.get('/withPaginate/:page', notes.findAll);
+    route.get('/page/:page', notes.findAll);
 
     // Update a Note with noteId
     route.put('/:noteId', notes.update);

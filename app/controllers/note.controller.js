@@ -1,4 +1,5 @@
 const Note = require('../models/note.model.js');
+const User = require('../models/user.model.js');
 
 // Create and Save a new Note
 exports.create = (req, res) => {
@@ -11,6 +12,7 @@ exports.create = (req, res) => {
 
     // Create a Note
     const note = new Note({
+        author:req.session.userId,
         title: req.body.title || "Untitled Note", 
         content: req.body.content
     });
@@ -18,7 +20,14 @@ exports.create = (req, res) => {
     // Save Note in the database
     note.save()
     .then(data => {
-        res.send(data);
+        console.log(data._id)
+        User.findByIdAndUpdate(req.session.userId, {
+        "$push":{notes:data._id}
+        }, {new: true}).then(console.log("user updated")).catch(err=>{
+            console.log(err)  
+        });
+        req.flash('info', 'note added successfully!!')
+        res.redirect('/dashboard');
     }).catch(err => {
         res.status(500).send({
             message: err.message || "Some error occurred while creating the Note."
@@ -47,7 +56,7 @@ exports.findOne = (req, res) => {
                 message: "Note not found with id " + req.params.noteId
             });            
         }
-        res.send(note);
+        res.render('edit',{note:note});
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
@@ -71,9 +80,8 @@ exports.update = (req, res) => {
 
     // Find note and update it with the request body
     Note.findByIdAndUpdate(req.params.noteId, {
-        author:req.body.author,
-        title: req.body.title || "Untitled Note",
-        content: req.body.content
+        '$set':{title: req.body.title,
+        content: req.body.content}
     }, {new: true})
     .then(note => {
         if(!note) {
@@ -81,7 +89,8 @@ exports.update = (req, res) => {
                 message: "Note not found with id " + req.params.noteId
             });
         }
-        res.send(note);
+        req.flash('info', 'note updated successfully!!')
+        res.redirect('/dashboard');
     }).catch(err => {
         if(err.kind === 'ObjectId') {
             return res.status(404).send({
@@ -103,7 +112,8 @@ exports.delete = (req, res) => {
                 message: "Note not found with id " + req.params.noteId
             });
         }
-        res.send({message: "Note deleted successfully!"});
+        req.flash('info', 'note deleted successfully!!')
+        res.redirect('/dashboard');
     }).catch(err => {
         if(err.kind === 'ObjectId' || err.name === 'NotFound') {
             return res.status(404).send({

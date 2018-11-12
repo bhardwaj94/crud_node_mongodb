@@ -1,0 +1,19 @@
+Initialize git
+  git init
+Add files to remote
+ git add .
+ git add remote origin https://github.com/bhardwaj94/crud_node_mongodb.git (remote)
+ 
+commit the message and code
+git commit -m "message"
+git merge origin/master --allow-unrelated-histories (remote)
+
+Push the code to git 
+git push origin master (branch name);
+
+for pull
+git pull origin master;
+
+For clone
+git clone -b branchName repository url
+git clone repository url
